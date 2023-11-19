@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Artist {
+  id        Int      @id @default(autoincrement())
+  name      String
+  birthCountry String
+  birthCity String
+  birthDate DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  works     Work[]
+
+  @@index([name], name: "name")
+  @@index([birthCountry], name: "birthCountry")
+}
+
+model Work {
+  id        Int      @id @default(autoincrement())
+  artist    Artist  @relation(fields: [artistId], references: [id])
+  artistId  Int
+  artwork   Artwork @relation(fields: [artworkId], references: [id])
+  artworkId Int
+
+  @@index([artistId], name: "artistId")
+  @@index([artworkId], name: "artworkId")
+}
+
+model Artwork {
+  id        Int      @id @default(autoincrement())
+  title     String
+  image     String
+  date      DateTime
+  width     Int
+  height    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  works     Work[]
+  @@index([title])
+  @@index([date])
+  @@index([width, height])
+}
+

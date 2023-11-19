@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  pg:
+    container_name: pg-playground-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pg-playground-admin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@playground.com
+      PGADMIN_DEFAULT_PASSWORD: playground
+    ports:
+      - 8080:80
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+volumes:
+  data:
+  pgadmin:
